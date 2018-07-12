@@ -16,7 +16,8 @@ import egovframework.com.cmm.service.FileVO;
 import egovframework.com.cmm.util.EgovUserDetailsHelper;
 import egovframework.let.cop.smt.sim.service.EgovIndvdlSchdulManageService;
 import egovframework.let.cop.smt.sim.service.IndvdlSchdulManageVO;
-
+import egovframework.let.park.service.ParkManaeVO;
+import egovframework.let.park.service.ParkManageService;
 import egovframework.rte.fdl.cmmn.exception.EgovBizException;
 import egovframework.rte.fdl.property.EgovPropertyService;
 
@@ -58,6 +59,9 @@ public class EgovIndvdlSchdulManageController {
 	/** EgovMessageSource */
     @Resource(name="egovMessageSource")
     EgovMessageSource egovMessageSource;
+    
+    @Resource(name="parkManageService")
+	ParkManageService parkManageService;
 
 	@Resource(name = "egovIndvdlSchdulManageService")
 	private EgovIndvdlSchdulManageService egovIndvdlSchdulManageService;
@@ -330,6 +334,57 @@ public class EgovIndvdlSchdulManageController {
 
 		return "/cop/smt/sim/EgovIndvdlSchdulManageMonthList";
 	}
+	//내가한 것
+	@RequestMapping(value="/cop/smt/sim/ParkManageMonthList.do")
+	public String ParkManageMonthList(
+			@ModelAttribute("searchVO") ComDefaultVO searchVO,
+			@RequestParam Map <String, Object> commandMap,
+			IndvdlSchdulManageVO indvdlSchdulManageVO,
+    		ModelMap model)
+    throws Exception {
+
+		if (!checkAuthority(model)) return "cmm/uat/uia/EgovLoginUsr";	// server-side 권한 확인
+
+		//일정구분 검색 유지
+        model.addAttribute("searchKeyword", commandMap.get("searchKeyword") == null ? "" : (String)commandMap.get("searchKeyword"));
+        model.addAttribute("searchCondition", commandMap.get("searchCondition") == null ? "" : (String)commandMap.get("searchCondition"));
+
+		java.util.Calendar cal = java.util.Calendar.getInstance();
+
+		String sYear = (String)commandMap.get("year");
+		String sMonth = (String)commandMap.get("month");
+
+		int iYear = cal.get(java.util.Calendar.YEAR);
+		int iMonth = cal.get(java.util.Calendar.MONTH);
+		//int iDate = cal.get(java.util.Calendar.DATE);
+
+                //검색 설정
+                String sSearchDate = "";
+                if(sYear == null || sMonth == null){
+                        sSearchDate += Integer.toString(iYear);
+                        sSearchDate += Integer.toString(iMonth+1).length() == 1 ? "0" + Integer.toString(iMonth+1) : Integer.toString(iMonth+1);
+                }else{
+                        iYear = Integer.parseInt(sYear);
+                        iMonth = Integer.parseInt(sMonth);
+                        sSearchDate += sYear;
+                        sSearchDate += Integer.toString(iMonth+1).length() == 1 ? "0" + Integer.toString(iMonth+1) :Integer.toString(iMonth+1);
+                }
+
+
+//-------------------------------------------------------
+		//공통코드 일정종류
+		ComDefaultCodeVO voComCode = new ComDefaultCodeVO();
+	   	voComCode = new ComDefaultCodeVO();
+    	voComCode.setCodeId("COM050");
+    	model.addAttribute("schdulSe", cmmUseService.selectCmmCodeDetail(voComCode));
+
+    	commandMap.put("searchMonth", sSearchDate);
+    	commandMap.put("searchMode", "MONTH");
+        model.addAttribute("resultList", egovIndvdlSchdulManageService.selectIndvdlSchdulManageRetrieve(commandMap));
+
+		return "/main/park/ParkManageMonthList";
+	}
+
 
 	/**
 	 * 일정 목록을 상세조회 조회한다.
@@ -610,6 +665,110 @@ public class EgovIndvdlSchdulManageController {
     	return sLocationUrl;
 
 	}
+	
+	//내가한 것
+		@RequestMapping(value="/cop/smt/sim/ParkManageRegist.do")
+		public String ParkManageRegist(
+				@ModelAttribute("searchVO") ComDefaultVO searchVO,
+				@RequestParam Map <String, Object> commandMap,
+				@ModelAttribute("indvdlSchdulManageVO") ParkManaeVO parkManageVO,
+				BindingResult bindingResult,
+	    		ModelMap model,
+	    		HttpServletRequest request)
+	    throws Exception {
+
+			if (!checkAuthority(model)) return "cmm/uat/uia/EgovLoginUsr";	// server-side 권한 확인
+
+			String sLocationUrl = "main/park/ParkManageRegist";
+
+	     	//공통코드  중요도 조회
+	    	ComDefaultCodeVO voComCode = new ComDefaultCodeVO();
+	    	voComCode.setCodeId("COM019");
+	    	model.addAttribute("schdulIpcrCode", cmmUseService.selectCmmCodeDetail(voComCode));
+	    	//공통코드  일정구분 조회
+	    	voComCode = new ComDefaultCodeVO();
+	    	voComCode.setCodeId("COM030");
+	    	model.addAttribute("schdulSe", cmmUseService.selectCmmCodeDetail(voComCode));
+	    	//공통코드  반복구분 조회
+	    	voComCode = new ComDefaultCodeVO();
+	    	voComCode.setCodeId("COM031");
+	    	model.addAttribute("reptitSeCode", cmmUseService.selectCmmCodeDetail(voComCode));
+
+	    	//일정시작일자(시)
+	    	model.addAttribute("schdulBgndeHH", getTimeHH());
+	    	//일정시작일자(분)
+	    	model.addAttribute("schdulBgndeMM", getTimeMM());
+	    	//일정종료일자(시)
+	    	model.addAttribute("schdulEnddeHH", getTimeHH());
+	    	//일정정료일자(분)
+	    	model.addAttribute("schdulEnddeMM", getTimeMM());
+
+	    	//팝업정보창 사용하여 셋팅하지 않고 고정하여 설정함(템플릿에서 기능 축소)
+	    	/*parkManageVO.setSchdulDeptName("관리자부서");
+	    	parkManageVO.setSchdulDeptId("ORGNZT_0000000000000");
+	    	parkManageVO.setSchdulChargerName("관리자");
+	    	parkManageVO.setSchdulChargerId("USRCNFRM_00000000000");
+*/
+	    	return sLocationUrl;
+
+		}
+		//내가한것
+		@RequestMapping(value="/cop/smt/sim/ParkManageRegistActor.do")
+		public String ParkManageRegistActor(
+				final MultipartHttpServletRequest multiRequest,
+				@ModelAttribute("searchVO") ComDefaultVO searchVO,
+				@RequestParam Map <String, Object> commandMap,
+				@ModelAttribute("indvdlSchdulManageVO") ParkManaeVO parkManaeVO,
+				BindingResult bindingResult,
+	    		ModelMap model,
+	    		HttpServletRequest request)
+	    throws Exception {
+
+			if (!checkAuthority(model)) return "cmm/uat/uia/EgovLoginUsr";	// server-side 권한 확인
+
+	    	LoginVO user = (LoginVO)request.getSession().getAttribute("LoginVO");
+
+			String sLocationUrl = "/cop/smt/sim/ParkManageRegist";
+			
+
+			String sCmd = commandMap.get("cmd") == null ? "" : (String)commandMap.get("cmd");
+			//log.info("cmd =>" + sCmd);
+
+	        if(sCmd.equals("save")){
+	    		//서버  validate 체크
+	            beanValidator.validate(parkManaeVO, bindingResult);
+	    		if(bindingResult.hasErrors()){
+
+	    			return sLocationUrl;
+	    		}
+
+	        	// 첨부파일 관련 첨부파일ID 생성
+	    		List<FileVO> _result = null;
+	    		String _atchFileId = "";
+
+	    		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+
+	    		if(!files.isEmpty()){
+	    		 _result = fileUtil.parseFileInf(files, "DSCH_", 0, "", "");
+	    		 _atchFileId = fileMngService.insertFileInfs(_result);  //파일이 생성되고나면 생성된 첨부파일 ID를 리턴한다.
+	    		}
+
+	        	// 리턴받은 첨부파일ID를 셋팅한다..
+	    		parkManaeVO.setAtchFileId(_atchFileId);			// 첨부파일 ID
+
+	    		//아이디 설정
+	    		/*parkManaeVO.setFrstRegisterId(user.getUniqId());
+	    		parkManaeVO.setLastUpdusrId(user.getUniqId());
+*/
+	    		parkManageService.insertParkManage(parkManaeVO);
+	        	sLocationUrl = "redirect:/cop/smt/sim/EgovIndvdlSchdulManageMonthList.do";
+	        }
+
+	        return sLocationUrl;
+
+
+		}
+
 
 	/**
 	 * 일정를 등록 처리 한다.
