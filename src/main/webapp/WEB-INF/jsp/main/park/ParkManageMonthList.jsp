@@ -53,6 +53,7 @@ int newLine = 0;
 <head>
 <meta http-equiv="Content-Language" content="ko" >
 <title>일정 월별 목록</title>
+
 <link href="<c:url value='/'/>css/common.css" rel="stylesheet" type="text/css" >
 
     <script type="text/javaScript" language="javascript">
@@ -172,7 +173,7 @@ A:hover { font-size:9pt; font-family:"돋움";color:red;text-decoration:none;}
 				</div>
                 <form name="IndvdlSchdulManageVO" id="IndvdlSchdulManageVO" action="<c:url value='/'/>cop/smt/sim/EgovIndvdlSchdulManageMonthList.do" method="post">
                 <input type="submit" id="invisible" class="invisible"/>
-	                <DIV id="content2" style="width:712px;">
+	                <DIV style="width:712px;">
 	                <!-- 날짜 네비게이션  -->
 						<!-- 검색 필드 박스 시작 -->
 						<div id="search_field">
@@ -217,7 +218,10 @@ A:hover { font-size:9pt; font-family:"돋움";color:red;text-decoration:none;}
                                             <img alt="다음월로 이동" src="<c:url value='/'/><%=sImgUrl %>btn_next.gif" align="middle" style="margin-left:4px;border:0px;">
                                             </a>
 								            <%}%>
-							  			</li>		
+							  			</li>	
+							  			<li>
+							  				<a href="${pageContext.request.contextPath}/dataTable.do" >자세한일정</a>
+							  			</li>	
 							  		</ul>
 								</div>
 								</fieldset>
