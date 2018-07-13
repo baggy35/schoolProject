@@ -22,8 +22,8 @@ public class ParkManageDao extends EgovAbstractDAO {
 	 * @return List
 	 * @throws Exception
 	 */
-	public List<?> selectIndvdlSchdulManageRetrieve(Map<?, ?> map) throws Exception{
-		 return  list("IndvdlSchdulManage.selectIndvdlSchdulManageRetrieve", map);
+	public List<?> selectParkIndvdlSchdulManageRetrieve(Map<?, ?> map) throws Exception{
+		 return  list("ParkIndvdlSchdulManage.selectParkIndvdlSchdulManageRetrieve", map);
 	}
 
 

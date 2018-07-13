@@ -31,8 +31,8 @@ public class ParkCmmUseServiceImpl extends EgovAbstractServiceImpl implements Pa
 	 * @throws Exception
 	 */
 	@Override
-	public List<CmmnDetailCode> selectCmmCodeDetail(ComDefaultCodeVO vo) throws Exception {
-		return cmmUseDAO.selectCmmCodeDetail(vo);
+	public List<CmmnDetailCode> selectParkCmmCodeDetail(ComDefaultCodeVO vo) throws Exception {
+		return parkCmmUseDAO.selectParkCmmCodeDetail(vo);
 	}
 
 	/**

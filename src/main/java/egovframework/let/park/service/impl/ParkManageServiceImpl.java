@@ -46,8 +46,8 @@ public class ParkManageServiceImpl extends EgovAbstractServiceImpl implements Pa
 	 * @throws Exception
 	 */
 	@Override
-	public List<?> selectIndvdlSchdulManageRetrieve(Map<?, ?> map) throws Exception{
-		return dao.selectIndvdlSchdulManageRetrieve(map);
+	public List<?> selectParkIndvdlSchdulManageRetrieve(Map<?, ?> map) throws Exception{
+		return parkManageDao.selectParkIndvdlSchdulManageRetrieve(map);
 	}
 
     /**

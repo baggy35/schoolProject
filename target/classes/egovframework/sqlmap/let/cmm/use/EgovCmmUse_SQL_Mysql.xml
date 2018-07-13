@@ -24,6 +24,18 @@
 			AND CODE_ID = #codeId#
 		]]>
 	</select>
+	<!-- 내가한 것 -->
+	<select id="ParkCmmUseDAO.selectParkCmmCodeDetail" parameterClass="ComDefaultCodeVO" resultMap="CmmCodeDetail">
+		<![CDATA[ 
+			SELECT 
+			CODE_ID, CODE, CODE_NM, CODE_DC
+			FROM 
+			LETTCCMMNDETAILCODE
+			WHERE
+			USE_AT = 'Y'
+			AND CODE_ID = #codeId#
+		]]>
+	</select>
 
     <select id="CmmUseDAO.selectOgrnztIdDetail" parameterClass="ComDefaultCodeVO" resultMap="CmmCodeDetail">
             <![CDATA[ 

@@ -11,8 +11,8 @@ import egovframework.com.cmm.service.impl.EgovComAbstractDAO;
 @Repository("parkCmmUseDAO")
 public class ParkCmmUseDAO extends EgovComAbstractDAO{
 	 @SuppressWarnings("unchecked")
-		public List<CmmnDetailCode> selectCmmCodeDetail(ComDefaultCodeVO vo) throws Exception {
-		return (List<CmmnDetailCode>) list("CmmUseDAO.selectCmmCodeDetail", vo);
+		public List<CmmnDetailCode> selectParkCmmCodeDetail(ComDefaultCodeVO vo) throws Exception {
+		return (List<CmmnDetailCode>) list("ParkCmmUseDAO.selectParkCmmCodeDetail", vo);
 	    }
 
 	    /**

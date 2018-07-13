@@ -70,7 +70,7 @@ public interface ParkManageService {
 	 * @param map
 	 * @exception Exception Exception
 	 */
-	public List<?> selectIndvdlSchdulManageRetrieve(Map<?, ?> map) throws Exception;
+	public List<?> selectParkIndvdlSchdulManageRetrieve(Map<?, ?> map) throws Exception;
 
 	/**
 	 * 일정를(을) 수정한다.

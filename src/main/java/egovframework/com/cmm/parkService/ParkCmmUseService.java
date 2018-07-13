@@ -7,7 +7,7 @@ import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.com.cmm.service.CmmnDetailCode;
 
 public interface ParkCmmUseService {
-	public List<CmmnDetailCode> selectCmmCodeDetail(ComDefaultCodeVO vo) throws Exception;
+	public List<CmmnDetailCode> selectParkCmmCodeDetail(ComDefaultCodeVO vo) throws Exception;
 
     /**
      * ComDefaultCodeVO의 리스트를 받아서 여러개의 코드 리스트를 맵에 담아서 리턴한다.

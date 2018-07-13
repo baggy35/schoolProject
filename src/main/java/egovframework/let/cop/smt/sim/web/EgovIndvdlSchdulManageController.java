@@ -9,6 +9,7 @@ import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.com.cmm.ComDefaultVO;
 import egovframework.com.cmm.EgovMessageSource;
 import egovframework.com.cmm.LoginVO;
+import egovframework.com.cmm.parkService.ParkCmmUseService;
 import egovframework.com.cmm.service.EgovCmmUseService;
 import egovframework.com.cmm.service.EgovFileMngService;
 import egovframework.com.cmm.service.EgovFileMngUtil;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -61,7 +63,10 @@ public class EgovIndvdlSchdulManageController {
     EgovMessageSource egovMessageSource;
     
     @Resource(name="parkManageService")
-	ParkManageService parkManageService;
+	private ParkManageService parkManageService;
+    
+    @Resource(name="parkCmmUseServiceImpl")
+    private ParkCmmUseService parkCmmUseService;
 
 	@Resource(name = "egovIndvdlSchdulManageService")
 	private EgovIndvdlSchdulManageService egovIndvdlSchdulManageService;
@@ -339,7 +344,7 @@ public class EgovIndvdlSchdulManageController {
 	public String ParkManageMonthList(
 			@ModelAttribute("searchVO") ComDefaultVO searchVO,
 			@RequestParam Map <String, Object> commandMap,
-			IndvdlSchdulManageVO indvdlSchdulManageVO,
+			ParkManaeVO parkManaeVO,
     		ModelMap model)
     throws Exception {
 
@@ -376,11 +381,11 @@ public class EgovIndvdlSchdulManageController {
 		ComDefaultCodeVO voComCode = new ComDefaultCodeVO();
 	   	voComCode = new ComDefaultCodeVO();
     	voComCode.setCodeId("COM050");
-    	model.addAttribute("schdulSe", cmmUseService.selectCmmCodeDetail(voComCode));
+    	model.addAttribute("schdulSe", parkCmmUseService.selectParkCmmCodeDetail(voComCode));
 
     	commandMap.put("searchMonth", sSearchDate);
     	commandMap.put("searchMode", "MONTH");
-        model.addAttribute("resultList", egovIndvdlSchdulManageService.selectIndvdlSchdulManageRetrieve(commandMap));
+        model.addAttribute("resultList", parkManageService.selectParkIndvdlSchdulManageRetrieve(commandMap));
 
 		return "/main/park/ParkManageMonthList";
 	}
@@ -687,7 +692,7 @@ public class EgovIndvdlSchdulManageController {
 	    	model.addAttribute("schdulIpcrCode", cmmUseService.selectCmmCodeDetail(voComCode));
 	    	//공통코드  일정구분 조회
 	    	voComCode = new ComDefaultCodeVO();
-	    	voComCode.setCodeId("COM030");
+	    	voComCode.setCodeId("COM050");
 	    	model.addAttribute("schdulSe", cmmUseService.selectCmmCodeDetail(voComCode));
 	    	//공통코드  반복구분 조회
 	    	voComCode = new ComDefaultCodeVO();
@@ -761,7 +766,7 @@ public class EgovIndvdlSchdulManageController {
 	    		parkManaeVO.setLastUpdusrId(user.getUniqId());
 */
 	    		parkManageService.insertParkManage(parkManaeVO);
-	        	sLocationUrl = "redirect:/cop/smt/sim/EgovIndvdlSchdulManageMonthList.do";
+	        	sLocationUrl = "redirect:/cop/smt/sim/ParkManageMonthList.do";
 	        }
 
 	        return sLocationUrl;
